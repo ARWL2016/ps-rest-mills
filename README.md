@@ -1,10 +1,7 @@
-## Restful Web Services with Node and Express
+## Restful Web Services with Node and Express (PS: Jonathan Mills, 2015)
 
 https://app.pluralsight.com/player?course=node-js-express-rest-web-services&author=jonathan-mills&name=node-js-express-rest-web-services-m2&clip=3   
 https://github.com/ARWL2016/ps-rest-mills  
-
-- Pluralsight Node Path Intermediate  
-- Jonathan Mills
 
 ### Contents     
 1. RESTful APIs  
