@@ -17,7 +17,7 @@ module.exports = (Book) => {
       query.genre = req.query.genre; 
     } 
     Book.find(query, (err, books) => {
-      if(err) {
+      if (err) {
         res.status(500).send(err);
       } else {
         res.json(books);
@@ -27,7 +27,7 @@ module.exports = (Book) => {
 
   bookRouter.use('/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
-      if(err) {
+      if (err) {
         res.status(500).send(err);
       } else if (book) {
         req.book = book; 
@@ -59,8 +59,8 @@ module.exports = (Book) => {
     if (req.body._id) {
       delete req.body._id; 
     }
-    for (let key in req.body) {
-      req.book[key] = req.body[key]; 
+    for (let prop in req.body) {
+      req.book[prop] = req.body[prop]; 
     }  
     req.book.save((error) => {
       if (error) {
@@ -72,11 +72,8 @@ module.exports = (Book) => {
   })
   .delete((req, res) => {
     req.book.remove((error) => {
-      if (error) {
-        res.status(500).send(error); 
-      } else {
-        res.status(204).send('Removed'); 
-      }
+      if (error) res.status(500).send(error); 
+      else res.status(204).send('Removed'); 
     }); 
   }); 
 

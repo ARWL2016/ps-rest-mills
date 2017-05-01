@@ -10,7 +10,7 @@ const app = express();
 
 let port = process.env.PORT || 3000; 
 
-const bookRoutes = require('./routes/bookRoutes')(Book); 
+const bookRoutes = require('./routes/book-routes')(Book); 
 
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(bodyParser.json());
