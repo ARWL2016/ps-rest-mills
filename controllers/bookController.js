@@ -37,5 +37,68 @@ module.exports = (Book) => {
    });    
   }
 
-  return { post, get };
+  findById = (req, res, next) => {
+    Book.findById(req.params.bookId, (err, book) => {
+      if (err) {
+        res.status(500).send(err);
+      } else if (book) {
+        req.book = book; 
+        next(); 
+      } else {
+        res.status(404).send('Book not found'); 
+      }    
+   });  
+  }
+
+  const getById = (req, res) => {
+
+      const returnBook = req.book.toJSON(); 
+      // adding to the obj is done in 2 stages, else links will return undefined
+      returnBook.links = {}; 
+      const newLink = `http://${req.headers.host}/api/books/?genre=${returnBook.genre}`; 
+      returnBook.links.FilterByThisGenre = newLink.replace(' ', '%20'); 
+      res.json(returnBook);   
+  }
+  
+  const putById = (req, res) => {
+    req.book.title = req.body.title; 
+    req.book.author = req.body.author; 
+    req.book.genre = req.body.genre; 
+    req.book.read = req.body.read; 
+    req.book.save((error) => {
+      if (error) {
+        res.status(500).send(error); 
+      } else {
+        res.json(req.book); 
+      }
+    }); 
+  }
+
+  patchById = (req, res) => {
+    if (req.body._id) {
+      delete req.body._id; 
+    }
+    for (let prop in req.body) {
+      req.book[prop] = req.body[prop]; 
+    }  
+    req.book.save((error) => {
+      if (error) {
+        res.status(500).send(error); 
+      } else {
+        res.json(req.book); 
+      }
+    }); 
+  }
+
+  deleteById = (req, res) => {
+    req.book.remove((error) => {
+      if (error) {
+        res.status(500).send(error); 
+      } else {
+        res.status(204).send('Removed'); 
+      }
+    }); 
+  }
+
+  return { post, get, getById, putById, patchById, deleteById, findById };
 }
