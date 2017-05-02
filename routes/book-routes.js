@@ -1,29 +1,12 @@
 const express = require('express'); 
-const bookRouter = express.Router(); 
 
 module.exports = (Book) => {
+  const bookRouter = express.Router();
 
+  const bookController = require('../controllers/bookController')(Book);
   bookRouter.route('/')
-  .post((req, res) => {
-    var book = new Book(req.body); 
-
-    book.save(); 
-    res.status(201).send(book); 
-  })
-  .get((req, res) => {
-    const query = {}; 
-
-    if (req.query.genre) {
-      query.genre = req.query.genre; 
-    } 
-    Book.find(query, (err, books) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.json(books);
-      }    
-   });    
-  }); 
+  .post(bookController.post)
+  .get(bookController.get); 
 
   bookRouter.use('/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
@@ -40,7 +23,13 @@ module.exports = (Book) => {
 
   bookRouter.route('/:bookId')
     .get((req, res) => {
-      res.json(req.book);   
+
+      const returnBook = req.book.toJSON(); 
+      // adding to the obj is done in 2 stages, else links will return undefined
+      returnBook.links = {}; 
+      var newLink = `http://${req.headers.host}/api/books/?genre=returnBook.genre${book._id}`; 
+      returnBook.links.FilterByThisGenre = newLink.replace(' ', '%20'); 
+      res.json(returnBook);   
     })
   .put((req, res) => {
     req.book.title = req.body.title; 
