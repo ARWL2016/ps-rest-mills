@@ -1,7 +1,7 @@
-var bookController = (Book) => {
+module.exports = (Book) => {
 
-  var post = (req, res) => {
-    var book = new Book(req.body); 
+  const post = (req, res) => {
+    const book = new Book(req.body); 
 
     if (!req.body.title) {
       res.status(400); 
@@ -14,7 +14,7 @@ var bookController = (Book) => {
     }
   }
 
-  var get = (req, res) => {
+  const get = (req, res) => {
     const query = {}; 
 
     if (req.query.genre) {
@@ -29,7 +29,7 @@ var bookController = (Book) => {
         books.forEach((bookModel, index, array) => {
           // strip out the Mongoose model and leave plain JSON
           let book = bookModel.toJSON(); 
-          newBook.link = `http://${req.headers.host}/api/books/${book._id}`; 
+          book.link = `http://${req.headers.host}/api/books/${book._id}`; 
           returnBooks.push(book); 
         })
         res.json(returnBooks);
@@ -39,5 +39,3 @@ var bookController = (Book) => {
 
   return { post, get };
 }
-
-module.exports = bookController; 

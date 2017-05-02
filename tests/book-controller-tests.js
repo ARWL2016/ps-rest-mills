@@ -4,12 +4,7 @@ const sinon = require('sinon');
 describe('Book Controller Tests', () => {
   describe('Post', () => {
     it('should not allow an empty title on post', () => {
-      var Book = (book) => { 
-        this.save = function(){
-          // this function mocks the Book model 
-        } 
-      };
-
+      
       var req = {
         body: {
           authors: 'Jon'
@@ -21,6 +16,7 @@ describe('Book Controller Tests', () => {
         send: sinon.spy() 
       };
 
+      const Book = require('../models/bookModel');
       var bookController = require('../controllers/BookController')(Book); 
       
       bookController.post(req, res); 

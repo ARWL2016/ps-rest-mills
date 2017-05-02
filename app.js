@@ -3,6 +3,7 @@ const express = require('express'),
       chalk = require('chalk'), 
       bodyParser = require('body-parser'),
       Book = require('./models/bookModel');
+console.log(chalk.red(Book, typeof Book));
  
 if (process.env.ENV === 'Test') {
   let db = mongoose.connect('mongodb://localhost/bookAPI_test');
@@ -24,7 +25,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/books', bookRoutes);
-// app.use('/api/authors', authorRoutes);
 
 app.listen(port, () => {
     console.log(chalk.green(`Running on port ${port}`));

@@ -1,12 +1,15 @@
 const express = require('express'); 
+const chalk = require('chalk');
 
 module.exports = (Book) => {
   const bookRouter = express.Router();
+  console.log(chalk.green(Book, typeof Book));
 
   const bookController = require('../controllers/bookController')(Book);
+
   bookRouter.route('/')
-  .post(bookController.post)
-  .get(bookController.get); 
+    .post(bookController.post)
+    .get(bookController.get); 
 
   bookRouter.use('/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
@@ -27,7 +30,7 @@ module.exports = (Book) => {
       const returnBook = req.book.toJSON(); 
       // adding to the obj is done in 2 stages, else links will return undefined
       returnBook.links = {}; 
-      var newLink = `http://${req.headers.host}/api/books/?genre=returnBook.genre${book._id}`; 
+      var newLink = `http://${req.headers.host}/api/books/?genre=${returnBook.genre}`; 
       returnBook.links.FilterByThisGenre = newLink.replace(' ', '%20'); 
       res.json(returnBook);   
     })
@@ -61,8 +64,11 @@ module.exports = (Book) => {
   })
   .delete((req, res) => {
     req.book.remove((error) => {
-      if (error) res.status(500).send(error); 
-      else res.status(204).send('Removed'); 
+      if (error) {
+        res.status(500).send(error); 
+      } else {
+        res.status(204).send('Removed'); 
+      }
     }); 
   }); 
 
